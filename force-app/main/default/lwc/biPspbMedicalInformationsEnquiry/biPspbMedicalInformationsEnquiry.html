@@ -1,0 +1,108 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<!--This LWC is used to create case records for Type - Medical Information Enquiry-->
+<template>
+	<div if:true={showSpinner}>
+		<c-bi-pspb-common-spinner></c-bi-pspb-common-spinner>
+	 </div>
+		<template if:true={casePopup}>
+			<div class="check"><c-bi-pspb-common-popup toast-message={successMsg} onbuttonclick={ClosePopup}></c-bi-pspb-common-popup></div>
+		</template>	
+	<template if:true={draftPopup}>
+		<div class="check"><c-bi-pspb-common-popup toast-message={successMessage} onbuttonclick={ClosePopup}></c-bi-pspb-common-popup></div>
+	</template>
+	<div class="main" data-it-uid={userId}>
+
+		<div class="response">
+
+			<div class="heading">
+
+				<button class="back" onclick={handleBack} onkeypress={handleBack}>
+					<div><img src={backArrow} alt="back arrow" class="img"></div>
+					<div>
+						<p>{backValue}</p>
+					</div>
+				</button>
+			</div>
+
+			<div class="medicalheading">
+				<h2>{medicalInfoHead}</h2>
+			</div>
+			<div class="form-container">
+				<!-- Your form content goes here -->
+				<div class="medicalform">
+					<div class={radioBtnColorChange}>
+						<label for="radioGroup">{selectType}</label>
+						<div class="medicalInput">
+							<lightning-radio-group name="options" options={subTypeOptions} value={selectedOption}
+								onchange={handleRadioChange} class="Radiobtnclr"  disabled={isReadOnly}></lightning-radio-group>
+						</div>
+
+
+					</div><br>
+					<div class="error-throwtitle" if:true={subTypError}> {subTypeErr}</div>
+					<label  for="radioGroup" data-field="Description">{descriptionValue}</label><br>
+					<lightning-textarea class={classFive} data-field="Description" variant="label-hidden" value={description} onchange={handledescription}></lightning-textarea>
+					<div class="error-throw" if:true={descriptionError}>
+						<img src={iconWarning} alt="Warning Icon" class="imgwarning"> &nbsp; {descriptionErr}
+					</div>
+					<div class="error-throw" if:true={descriptionLengthError}>
+						<img src={iconWarning} alt="Warning Icon" class="imgwarning">
+						&nbsp;{descritionErrChar}
+					</div>
+
+					<div>
+						<template if:true={errorMessage}>
+							<p class="slds-text-color_error">{errorMessage}</p>
+						</template>
+					</div>
+					<br><label class="attchment" for="attchment">{attachment}</label>
+					<div>
+						<input if:true={InputOne} class="file-imge" type="file" accept=".png, .jpg, .jpeg, .pdf"
+						onchange={handleFileInputChange}
+						multiple  />
+						<input if:true={InputTwo} class="file-imge" type="file" accept=".png, .jpg, .jpeg, .pdf"
+						onchange={handleFileInputPre}
+						multiple  />
+					<div class="adduploadbtn">
+					
+						<img class="symptomcompletetickcheck" alt={alternateTextTick} src={symptomCompleteTick}>
+						<p class="AddPhotos">Add your photos</p>
+						<p class="onlyallowd">5 MB (Maximum limit)</p>
+						<div class="relativeRight" if:true={upLoadedLarge}>{fileTooLarge}</div>
+					 </div>
+					</div>
+					
+				</div>
+				
+			<p class="MaxLimit" if:true={isLimitReached}>You can only upload a maximum of 3 files. Please remove a file to add another.</p>
+			<p class="MaxLimit" if:true={maximumLimit}>Total file size exceeds 5 MB. Please upload smaller files.</p>
+			<!-- Display file previews -->
+			<div if:true={previewUrls} class="image-container">
+				<template for:each={previewUrls} for:item="url" for:index="index">
+					<div key={url} class="image-file-set">
+						<button class="fileuploadbtn" onclick={removeImage} data-index={index} data-it-button="Remove Image">X</button>
+			
+						<!-- Check if the file is a PDF to show a static image -->
+						<template if:true={pdfImg}>
+							<img src={pdfFile} alt="PDF Placeholder" class="uploaded-image" />
+						</template>
+						<template if:false={pdfImg}>
+							<img src={url} alt="preview" class="uploaded-image" />
+						</template>
+					</div>
+				</template>
+			</div>
+				<div class="buttondiv">
+					<div><button class="button1" onclick={handleInsertUpdate} data-value="Medical Information Enquiry"
+							data-it-button="medicalinformationenquiry: Create New Case" disabled={isSubmitButtonDisabled}>{createCase}</button></div>
+					<div><button class="button2" onclick={handleInsertDraft} data-value="Medical Information Enquiry"
+							data-it-button="medicalinformationenquiry: Save as Draft" disabled={isButtonDisabled}>{createDraft}</button></div>
+							
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</template>
